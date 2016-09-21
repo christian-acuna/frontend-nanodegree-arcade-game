@@ -1,6 +1,6 @@
 // Enemies our player must avoid
-var MAX_SPEED = 700;
-var BASE_SPEED = 300;
+var MAX_SPEED = 100;
+var BASE_SPEED = 100;
 
 var Enemy = function(x, y) {
     // Variables applied to each of our instances go here,
@@ -9,7 +9,7 @@ var Enemy = function(x, y) {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    this.height = 100;
+    this.height = 171;
     this.width = 101;
     this.x = x;
     this.y = y;
@@ -35,6 +35,7 @@ Enemy.prototype.update = function(dt) {
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    ctx.strokeRect(this.x + 3, this.y + 75, this.width - 5 ,this.height - 100);
 };
 
 // Now write your own player class
@@ -43,7 +44,7 @@ Enemy.prototype.render = function() {
 var Player = function() {
   this.sprite = 'images/char-boy.png';
   this.x = 300;
-  this.y = 480;
+  this.y = 570;
   this.height = 171;
   this.width = 101;
 };
@@ -58,32 +59,34 @@ Player.prototype.update = function() {
   console.log('y: ' + this.y);
 };
 
+
 Player.prototype.handleInput = function(input) {
 
   if (input === 'left' && this.x > 0) {
     this.x -= 100;
   } else if (input === 'right' && this.x < 600) {
     this.x += 100;
-  } else if (input === 'up' && this.y > -60) {
+  } else if (input === 'up' && this.y > 30) {
     this.y -= 90;
-  } else if (input === 'down'&& this.y < 480) {
+  } else if (input === 'down' && this.y < 570) {
     this.y += 90;
   }
 };
 
 Player.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  ctx.strokeRect(this.x + 15, this.y + 65, this.width - 30 ,this.height - 95);
 };
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-var enemyRow1 = new Enemy(-100, 60);
-var enemyRow2 = new Enemy(0, 140);
-var enemyRow22 = new Enemy(-500, 140);
-var enemyRow3 = new Enemy(-300, 220);
-var enemyRow4 = new Enemy(-20, 310);
-var enemyRow5 = new Enemy(-1000, 310);
+var enemyRow1 = new Enemy(-100, 160);
+var enemyRow2 = new Enemy(0, 240);
+var enemyRow22 = new Enemy(-500, 240);
+var enemyRow3 = new Enemy(-300, 320);
+var enemyRow4 = new Enemy(-20, 410);
+var enemyRow5 = new Enemy(-1000, 410);
 var allEnemies = [];
 allEnemies.push(enemyRow1);
 allEnemies.push(enemyRow22);

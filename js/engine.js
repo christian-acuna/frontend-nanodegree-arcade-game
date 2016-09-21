@@ -26,7 +26,7 @@ var Engine = (function(global) {
         lastTime;
 
     canvas.width = 708;
-    canvas.height = 707;
+    canvas.height = 808;
     doc.body.appendChild(canvas);
 
     /* This function serves as the kickoff point for the game loop itself
@@ -80,7 +80,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
       updateEntities(dt);
-      // checkCollisions();
+      checkCollisions();
     }
 
     /* This is called by the update function and loops through all of the
@@ -94,22 +94,30 @@ var Engine = (function(global) {
       allEnemies.forEach(function(enemy) {
           enemy.update(dt);
         });
-      // player.update();
+      player.update();
+      winGame();
     }
 
-    function collides(a, b) {
-      // console.log(b.width);
-      return a.x < b.x + b.width &&
-             a.x + a.width > b.x &&
-             a.y < b.y + b.height &&
-             a.y + a.height > b.y;
+    function collides(rect1, rect2) {
+      return (rect1.x + 15 < rect2.x + 3 + rect2.width - 5 &&
+             (rect1.x + 15) + (rect1.width - 30) > rect2.x + 3 &&
+             (rect1.y + 65) < rect2.y + 75 + rect2.height - 100 &&
+             (rect1.height - 95) + (rect1.y + 65) > rect2.y + 75);
+    }
+
+    function winGame() {
+      if (player.y === 30) {
+        player.x = 300;
+        player.y = 570;
+      }
     }
 
     function checkCollisions() {
       allEnemies.forEach(function(enemy) {
         if (collides(player, enemy)) {
           player.x = 300;
-          player.y = 480;
+          player.y = 570;
+          render();
         }
       });
     }
@@ -126,6 +134,7 @@ var Engine = (function(global) {
        */
       var rowImages = [
               'images/water-block.png',   // Top row is water
+              'images/water-block.png',   // Top row is water
               'images/stone-block.png',   // Row 1 of 4 of stone
               'images/stone-block.png',   // Row 2 of 4 of stone
               'images/stone-block.png',   // Row 3 of 4 of stone
@@ -133,7 +142,7 @@ var Engine = (function(global) {
               'images/grass-block.png',   // Row 1 of 2 of grass
               'images/grass-block.png'    // Row 2 of 2 of grass
           ],
-          numRows = 7,
+          numRows = 8,
           numCols = 7,
           row, col;
 
