@@ -4,6 +4,7 @@ var BASE_SPEED = 300;
 var MAX_X_POSITION = 300;
 var START_X = 300;
 var START_Y = 570;
+var MAX_LIVES = 10;
 
 var Enemy = function(x, y) {
     // Variables applied to each of our instances go here,
@@ -46,7 +47,7 @@ Enemy.prototype.update = function(dt) {
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     // ctx.strokeRect(this.x + 3, this.y + 75, this.width - 5 ,this.height - 100);
-};
+  };
 
 // Now write your own player class
 // This class requires an update(), render() and
@@ -57,13 +58,18 @@ var Player = function() {
   this.y = START_Y;
   this.height = 171;
   this.width = 101;
+  this.lives = MAX_LIVES;
+  this.score = 0;
 };
 
 Player.prototype.update = function() {
   console.log('x: ' + this.x);
   console.log('y: ' + this.y);
+  var currentLives = 'Lives: ' + this.lives;
+  $('#lives').text(currentLives);
+  var score = 'Score: ' + this.score;
+  $('#score').text(score);
 };
-
 
 Player.prototype.handleInput = function(input) {
   // disables input key if it will move the player out of bounds
@@ -83,7 +89,6 @@ Player.prototype.render = function() {
   // ctx.strokeRect(this.x + 15, this.y + 65, this.width - 30 ,this.height - 95);
 };
 
-
 Player.prototype.changeChar = function(value) {
   switch (value) {
   case '1':
@@ -94,17 +99,17 @@ Player.prototype.changeChar = function(value) {
   break;
   case '3':
     this.sprite = 'images/char-horn-girl.png';
-    break;
+  break;
   case '4':
     this.sprite = 'images/char-pink-girl.png';
-    break;
+  break;
   case '5':
     this.sprite = 'images/char-princess-girl.png';
-    break;
+  break;
   case '6':
     this.sprite = 'images/enemy-bug.png';
-    break;
-  }
+  break;
+}
 };
 
 // Now instantiate your objects.
@@ -138,50 +143,48 @@ document.addEventListener('keyup', function(e) {
     player.handleInput(allowedKeys[e.keyCode]);
   });
 
-
 var iconSelect;
 
-window.onload = function(){
+window.onload = function() {
 
-    iconSelect = new IconSelect("my-icon-select",
-        {'selectedIconWidth':28,
-        'selectedIconHeight':48,
-        'selectedBoxPadding':0,
-        'iconsWidth':28,
-        'iconsHeight':48,
-        'boxIconSpace':1,
-        'vectoralIconNumber':2,
-        'horizontalIconNumber':2});
+    iconSelect = new IconSelect('my-icon-select',
+        {selectedIconWidth:28,
+        selectedIconHeight:48,
+        selectedBoxPadding:0,
+        iconsWidth:28,
+        iconsHeight:48,
+        boxIconSpace:1,
+        vectoralIconNumber:2,
+        horizontalIconNumber:2});
 
     var icons = [];
-    icons.push({'iconFilePath':'images/char-boy.png', 'iconValue':'1'});
-    icons.push({'iconFilePath':'images/char-cat-girl.png', 'iconValue':'2'});
-    icons.push({'iconFilePath':'images/char-horn-girl.png', 'iconValue':'3'});
-    icons.push({'iconFilePath':'images/char-pink-girl.png', 'iconValue':'4'});
-    icons.push({'iconFilePath':'images/char-princess-girl.png', 'iconValue':'5'});
-    icons.push({'iconFilePath':'images/enemy-bug.png', 'iconValue':'6'});
+    icons.push({iconFilePath:'images/char-boy.png', iconValue:'1'});
+    icons.push({iconFilePath:'images/char-cat-girl.png', iconValue:'2'});
+    icons.push({iconFilePath:'images/char-horn-girl.png', iconValue:'3'});
+    icons.push({iconFilePath:'images/char-pink-girl.png', iconValue:'4'});
+    icons.push({iconFilePath:'images/char-princess-girl.png', iconValue:'5'});
+    icons.push({iconFilePath:'images/enemy-bug.png', iconValue:'6'});
 
     iconSelect.refresh(icons);
 
-};
+  };
 
 var reset = function() {
-    console.log('work');
-    player.x = START_X;
-    player.y = START_Y;
-  };
+      console.log('work');
+      player.x = START_X;
+      player.y = START_Y;
+      player.lives = MAX_LIVES;
+    };
+
+document.getElementById('my-icon-select').addEventListener('changed', function(e) {
+  var value = iconSelect.getSelectedValue();
+  player.changeChar(value);
+});
 
 document.querySelector('button').addEventListener('click', reset, false);
 
-document.getElementById('my-icon-select').addEventListener('changed', function(e) {
-              var value = iconSelect.getSelectedValue();
-              console.log(value);
-              player.changeChar(value);
-            });
-
-            window.addEventListener("keydown", function(e) {
-                // space and arrow keys
-                if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
-                    e.preventDefault();
-                }
-            }, false);
+window.addEventListener('keydown', function(e) {
+  // space and arrow keys
+  if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+    e.preventDefault();
+  }}, false);

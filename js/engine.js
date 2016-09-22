@@ -111,6 +111,7 @@ var Engine = (function(global) {
       if (player.y === 30) {
         player.x = 300;
         player.y = 570;
+        player.score += 100;
       }
     }
 
@@ -121,6 +122,8 @@ var Engine = (function(global) {
         if (collides(player, enemy)) {
           player.x = 300;
           player.y = 570;
+          player.lives = player.lives - 1;
+          player.update();
           render();
         }
       });
