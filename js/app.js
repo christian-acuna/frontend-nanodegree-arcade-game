@@ -65,6 +65,7 @@ var Player = function() {
 Player.prototype.update = function() {
   console.log('x: ' + this.x);
   console.log('y: ' + this.y);
+  $('#pos').text(this.x + ' ' + this.y);
   var currentLives = 'Lives: ' + this.lives;
   $('#lives').text(currentLives);
   var score = 'Score: ' + this.score;
@@ -153,9 +154,9 @@ window.onload = function() {
         selectedBoxPadding:0,
         iconsWidth:28,
         iconsHeight:48,
-        boxIconSpace:1,
+        boxIconSpace:5,
         vectoralIconNumber:2,
-        horizontalIconNumber:2});
+        horizontalIconNumber:1});
 
     var icons = [];
     icons.push({iconFilePath:'images/char-boy.png', iconValue:'1'});

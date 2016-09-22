@@ -1,6 +1,6 @@
 body {
-    /*text-align: center;*/
     /*overflow: hidden;*/
+    text-align: center;
 }
 
 .wrapper {
@@ -23,6 +23,7 @@ canvas {
 
 .iconSelect {
   width: 100%;
+  text-align: center;
 }
 
 .title {
@@ -33,8 +34,8 @@ canvas {
 }
 
 .input {
-  /*text-align: center;*/
-  margin: 20px 0;
+  text-align: left;
+  margin-top: 60px;
   display: block;
 }
 
