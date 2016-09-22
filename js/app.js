@@ -6,6 +6,20 @@ var START_X = 300;
 var START_Y = 570;
 var MAX_LIVES = 10;
 
+var Prize = function(x, y, score, image, life) {
+  this.score = score;
+  this.sprite = image;
+  this.x = x;
+  this.y = y;
+  this.life = life;
+};
+
+Prize.prototype.render = function() {
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  // ctx.strokeRect(this.x + 15, this.y + 65, this.width - 30 ,this.height - 95);
+};
+
+
 var Enemy = function(x, y) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
@@ -29,12 +43,13 @@ Enemy.prototype.update = function(dt) {
     // all computers.
     // if the x position of the enemy is greater than CANVAS_WIDTH
     // then the x coordinate and speed gets reset randomly
+
     if (this.x > CANVAS_WIDTH) {
       // randomly reset the x position of the enemy to a negative
       // postion
       this.x = -(Math.floor(Math.random() * MAX_X_POSITION));
       //Change speed randomly every time enemey is reset
-      this.speed = Math.floor(Math.random() * MAX_SPEED + 200);
+      this.speed = Math.floor(Math.random() * MAX_SPEED + BASE_SPEED);
       // console.log(this.speed);
     } else {
       // multiplies the speed by time delta and increments
@@ -46,7 +61,7 @@ Enemy.prototype.update = function(dt) {
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    // ctx.strokeRect(this.x + 3, this.y + 75, this.width - 5 ,this.height - 100);
+    ctx.strokeRect(this.x + 3, this.y + 75, this.width - 5 ,this.height - 100);
   };
 
 // Now write your own player class
@@ -60,11 +75,14 @@ var Player = function() {
   this.width = 101;
   this.lives = MAX_LIVES;
   this.score = 0;
+  this.round = 0;
 };
 
 Player.prototype.update = function() {
-  console.log('x: ' + this.x);
-  console.log('y: ' + this.y);
+  if (player.lives === 0) {
+    reset();
+    $("#over").fadeIn('slow').animate({opacity: 1.0}, 1500).fadeOut('slow');
+  }
   $('#pos').text(this.x + ' ' + this.y);
   var currentLives = 'Lives: ' + this.lives;
   $('#lives').text(currentLives);
@@ -117,19 +135,20 @@ Player.prototype.changeChar = function(value) {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
-var enemyRow1 = new Enemy(-100, 160);
-var enemyRow2 = new Enemy(0, 240);
-var enemyRow22 = new Enemy(-500, 240);
-var enemyRow3 = new Enemy(-300, 320);
-var enemyRow4 = new Enemy(-20, 410);
-var enemyRow5 = new Enemy(-1000, 410);
+var heart = new Prize(605, 70, 100, 'images/Heart.png', 1);
+var enemy1Row1 = new Enemy(-100, 140);
+var enemy1Row2 = new Enemy(0, 230);
+var enemy2Row2 = new Enemy(-500, 230);
+var enemy1Row3 = new Enemy(-300, 310);
+var enemy1Row4 = new Enemy(-20, 390);
+var enemy2Row4 = new Enemy(-1000, 390);
 var allEnemies = [];
-allEnemies.push(enemyRow1);
-allEnemies.push(enemyRow22);
-allEnemies.push(enemyRow2);
-allEnemies.push(enemyRow3);
-allEnemies.push(enemyRow4);
-allEnemies.push(enemyRow5);
+allEnemies.push(enemy1Row1);
+allEnemies.push(enemy1Row2);
+allEnemies.push(enemy2Row2);
+allEnemies.push(enemy1Row3);
+allEnemies.push(enemy1Row4);
+allEnemies.push(enemy2Row4);
 var player = new Player();
 
 // This listens for key presses and sends the keys to your
@@ -175,6 +194,7 @@ var reset = function() {
       player.x = START_X;
       player.y = START_Y;
       player.lives = MAX_LIVES;
+      player.score = 0;
     };
 
 document.getElementById('my-icon-select').addEventListener('changed', function(e) {

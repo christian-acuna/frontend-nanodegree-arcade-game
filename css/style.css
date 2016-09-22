@@ -20,6 +20,9 @@ body {
 canvas {
   /*width: 40%;*/
 }
+#over {
+  display: none;
+}
 
 .iconSelect {
   width: 100%;

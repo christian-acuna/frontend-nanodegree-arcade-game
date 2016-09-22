@@ -108,10 +108,11 @@ var Engine = (function(global) {
     }
 
     function winGame() {
-      if (player.y === 30) {
+      if (player.y === 30 && player.x === 600) {
         player.x = 300;
         player.y = 570;
-        player.score += 100;
+        player.score += heart.score;
+        player.lives += heart.life;
       }
     }
 
@@ -186,6 +187,7 @@ var Engine = (function(global) {
         });
 
       player.render();
+      heart.render();
     }
 
     /* This function does nothing but it could have been a good place to
@@ -209,7 +211,8 @@ var Engine = (function(global) {
         'images/char-cat-girl.png',
         'images/char-horn-girl.png',
         'images/char-pink-girl.png',
-        'images/char-princess-girl.png'
+        'images/char-princess-girl.png',
+        'images/Heart.png'
     ]);
     Resources.onReady(init);
 
