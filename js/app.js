@@ -1,6 +1,9 @@
 // Enemies our player must avoid
-var MAX_SPEED = 100;
-var BASE_SPEED = 100;
+var MAX_SPEED = 700;
+var BASE_SPEED = 300;
+var MAX_X_POSITION = 300;
+var START_X = 300;
+var START_Y = 570;
 
 var Enemy = function(x, y) {
     // Variables applied to each of our instances go here,
@@ -23,11 +26,18 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    if (this.x > 708) {
-      this.x = -(Math.floor(Math.random() * MAX_SPEED));
+    // if the x position of the enemy is greater than CANVAS_WIDTH
+    // then the x coordinate and speed gets reset randomly
+    if (this.x > CANVAS_WIDTH) {
+      // randomly reset the x position of the enemy to a negative
+      // postion
+      this.x = -(Math.floor(Math.random() * MAX_X_POSITION));
+      //Change speed randomly every time enemey is reset
       this.speed = Math.floor(Math.random() * MAX_SPEED + 200);
       // console.log(this.speed);
     } else {
+      // multiplies the speed by time delta and increments
+      // the enemy's x position
       this.x += this.speed * dt;
     }
   };
@@ -35,7 +45,7 @@ Enemy.prototype.update = function(dt) {
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    ctx.strokeRect(this.x + 3, this.y + 75, this.width - 5 ,this.height - 100);
+    // ctx.strokeRect(this.x + 3, this.y + 75, this.width - 5 ,this.height - 100);
 };
 
 // Now write your own player class
@@ -43,15 +53,10 @@ Enemy.prototype.render = function() {
 // a handleInput() method.
 var Player = function() {
   this.sprite = 'images/char-boy.png';
-  this.x = 300;
-  this.y = 570;
+  this.x = START_X;
+  this.y = START_Y;
   this.height = 171;
   this.width = 101;
-};
-
-var inBounds = function(object) {
-  return object.x > 0 && object.x <= 508 &&
-         object.y >= 0 && object.y <= 507;
 };
 
 Player.prototype.update = function() {
@@ -61,7 +66,7 @@ Player.prototype.update = function() {
 
 
 Player.prototype.handleInput = function(input) {
-
+  // disables input key if it will move the player out of bounds
   if (input === 'left' && this.x > 0) {
     this.x -= 100;
   } else if (input === 'right' && this.x < 600) {
@@ -75,12 +80,37 @@ Player.prototype.handleInput = function(input) {
 
 Player.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-  ctx.strokeRect(this.x + 15, this.y + 65, this.width - 30 ,this.height - 95);
+  // ctx.strokeRect(this.x + 15, this.y + 65, this.width - 30 ,this.height - 95);
+};
+
+
+Player.prototype.changeChar = function(value) {
+  switch (value) {
+  case '1':
+    this.sprite = 'images/char-boy.png';
+  break;
+  case '2':
+    this.sprite = 'images/char-cat-girl.png';
+  break;
+  case '3':
+    this.sprite = 'images/char-horn-girl.png';
+    break;
+  case '4':
+    this.sprite = 'images/char-pink-girl.png';
+    break;
+  case '5':
+    this.sprite = 'images/char-princess-girl.png';
+    break;
+  case '6':
+    this.sprite = 'images/enemy-bug.png';
+    break;
+  }
 };
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
+
 var enemyRow1 = new Enemy(-100, 160);
 var enemyRow2 = new Enemy(0, 240);
 var enemyRow22 = new Enemy(-500, 240);
@@ -108,11 +138,6 @@ document.addEventListener('keyup', function(e) {
     player.handleInput(allowedKeys[e.keyCode]);
   });
 
-var reset = function() {
-  console.log('works');
-  player.x = 300;
-  player.y = 480;
-};
 
 var iconSelect;
 
@@ -121,12 +146,12 @@ window.onload = function(){
     iconSelect = new IconSelect("my-icon-select",
         {'selectedIconWidth':28,
         'selectedIconHeight':48,
-        'selectedBoxPadding':5,
+        'selectedBoxPadding':0,
         'iconsWidth':28,
         'iconsHeight':48,
-        'boxIconSpace':4,
-        'vectoralIconNumber':8,
-        'horizontalIconNumber':1});
+        'boxIconSpace':1,
+        'vectoralIconNumber':2,
+        'horizontalIconNumber':2});
 
     var icons = [];
     icons.push({'iconFilePath':'images/char-boy.png', 'iconValue':'1'});
@@ -140,31 +165,23 @@ window.onload = function(){
 
 };
 
-var changeChar = function(value) {
-  switch (value) {
-  case '1':
-    player.sprite = 'images/char-boy.png';
-  break;
-  case '2':
-    player.sprite = 'images/char-cat-girl.png';
-  break;
-  case '3':
-    player.sprite = 'images/char-horn-girl.png';
-    break;
-  case '4':
-    player.sprite = 'images/char-pink-girl.png';
-    break;
-  case '5':
-    player.sprite = 'images/char-princess-girl.png';
-    break;
-  case '6':
-    player.sprite = 'images/enemy-bug.png';
-    break;
-  }
-};
+var reset = function() {
+    console.log('work');
+    player.x = START_X;
+    player.y = START_Y;
+  };
+
 document.querySelector('button').addEventListener('click', reset, false);
+
 document.getElementById('my-icon-select').addEventListener('changed', function(e) {
               var value = iconSelect.getSelectedValue();
               console.log(value);
-              changeChar(value);
+              player.changeChar(value);
             });
+
+            window.addEventListener("keydown", function(e) {
+                // space and arrow keys
+                if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+                    e.preventDefault();
+                }
+            }, false);

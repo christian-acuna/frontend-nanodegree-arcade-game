@@ -13,6 +13,8 @@
  * the canvas' context (ctx) object globally available to make writing app.js
  * a little simpler to work with.
  */
+ var CANVAS_HEIGHT = 808;
+ var CANVAS_WIDTH = 708;
 
 var Engine = (function(global) {
     /* Predefine the variables we'll be using within this scope,
@@ -25,8 +27,8 @@ var Engine = (function(global) {
         ctx = canvas.getContext('2d'),
         lastTime;
 
-    canvas.width = 708;
-    canvas.height = 808;
+    canvas.width = CANVAS_WIDTH;
+    canvas.height = CANVAS_HEIGHT;
     doc.body.appendChild(canvas);
 
     /* This function serves as the kickoff point for the game loop itself
@@ -111,6 +113,8 @@ var Engine = (function(global) {
         player.y = 570;
       }
     }
+
+
 
     function checkCollisions() {
       allEnemies.forEach(function(enemy) {
