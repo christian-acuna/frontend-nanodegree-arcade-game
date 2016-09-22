@@ -1,6 +1,25 @@
-frontend-nanodegree-arcade-game
-===============================
+# HTML5 Canvas: Frogger
 
-Students should use this [rubric](https://review.udacity.com/#!/projects/2696458597/rubric) for self-checking their submission. Make sure the functions you write are **object-oriented** - either class functions (like Player and Enemy) or class prototype functions such as Enemy.prototype.checkCollisions, and that the keyword 'this' is used appropriately within your class and class prototype functions to refer to the object the function is called upon. Also be sure that the **readme.md** file is updated with your instructions on both how to 1. Run and 2. Play your arcade game.
+Install
+-------
+To get started, clone or fork the repo and run:
+```
+$ npm install
+```
+and the run `$ gulp` to launch the Browsersync server. This game was developed using
+node version 6.3.1, so make sure you have the right version if you have any problems running the gulp task.
 
-For detailed instructions on how to get started, check out this [guide](https://docs.google.com/document/d/1v01aScPjSWCCWQLIpFqvg3-vXLH2e8_SZQKC8jNO0Dc/pub?embedded=true).
+Gameplay
+-------
+The player starts off with ten lives and tries to make it pass the lanes without
+colliding with a ladybug. The speed of the ladybug is generated dynamically every time it enters the screen.
+
+![Demo](http://i.giphy.com/l3vRnlO3UZmPgjCTe.gif)
+
+## Change Character
+
+![change-char](https://cloud.githubusercontent.com/assets/7112158/18740507/a0d6d946-80dc-11e6-97a7-1907e96d84ea.gif)
+
+### License
+
+This game is released under the [MIT License](http://www.opensource.org/licenses/MIT).
