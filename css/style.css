@@ -45,3 +45,24 @@ canvas {
 .reset {
   margin-bottom: 20px;
 }
+
+
+@media screen and (max-width: 1100px) {
+
+  .wrapper {
+    width: 300px;
+    flex-wrap: wrap;
+    text-align: center;
+    margin: 0 200px;
+  }
+  .container {
+    width: 75%;
+    margin: 0 auto;
+    text-align: center;
+  }
+  canvas {
+    /*width: 100%;*/
+    text-align: center;
+    margin: 0 auto;
+  }
+}
