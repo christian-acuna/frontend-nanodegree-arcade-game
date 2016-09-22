@@ -1,4 +1,3 @@
-// Enemies our player must avoid
 var MAX_SPEED = 700;
 var BASE_SPEED = 300;
 var MAX_X_POSITION = 300;
@@ -19,7 +18,7 @@ Prize.prototype.render = function() {
   // ctx.strokeRect(this.x + 15, this.y + 65, this.width - 30 ,this.height - 95);
 };
 
-
+// Enemies our player must avoid
 var Enemy = function(x, y) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
