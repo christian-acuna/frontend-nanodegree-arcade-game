@@ -1,3 +1,68 @@
 body {
+    /*overflow: hidden;*/
     text-align: center;
+}
+
+.wrapper {
+  display: flex;
+  width: 1060px;
+  margin: 0 auto;
+}
+
+.container {
+  /*width: 50%;*/
+  /*display: flex;*/
+  /*flex-wrap: wrap;*/
+  margin: 0 auto;
+  /*margin-bottom: 20px;*/
+}
+
+canvas {
+  /*width: 40%;*/
+}
+#over {
+  display: none;
+}
+
+.iconSelect {
+  width: 100%;
+  text-align: center;
+}
+
+.title {
+  text-align: left;
+  width: 100%;
+  margin-bottom: 0;
+  margin-top: 40px;
+}
+
+.input {
+  text-align: left;
+  margin-top: 60px;
+  display: block;
+}
+
+.reset {
+  margin-bottom: 20px;
+}
+
+
+@media screen and (max-width: 1100px) {
+
+  .wrapper {
+    width: 300px;
+    flex-wrap: wrap;
+    text-align: center;
+    margin: 0 200px;
+  }
+  .container {
+    width: 75%;
+    margin: 0 auto;
+    text-align: center;
+  }
+  canvas {
+    /*width: 100%;*/
+    text-align: center;
+    margin: 0 auto;
+  }
 }

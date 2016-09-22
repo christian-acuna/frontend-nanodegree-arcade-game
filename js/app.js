@@ -1,7 +1,24 @@
-// Enemies our player must avoid
-var MAX_SPEED = 100;
-var BASE_SPEED = 100;
+var MAX_SPEED = 700;
+var BASE_SPEED = 300;
+var MAX_X_POSITION = 300;
+var START_X = 300;
+var START_Y = 570;
+var MAX_LIVES = 10;
 
+var Prize = function(x, y, score, image, life) {
+  this.score = score;
+  this.sprite = image;
+  this.x = x;
+  this.y = y;
+  this.life = life;
+};
+
+Prize.prototype.render = function() {
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  // ctx.strokeRect(this.x + 15, this.y + 65, this.width - 30 ,this.height - 95);
+};
+
+// Enemies our player must avoid
 var Enemy = function(x, y) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
@@ -23,11 +40,19 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    if (this.x > 708) {
-      this.x = -(Math.floor(Math.random() * MAX_SPEED));
-      this.speed = Math.floor(Math.random() * MAX_SPEED + 200);
+    // if the x position of the enemy is greater than CANVAS_WIDTH
+    // then the x coordinate and speed gets reset randomly
+
+    if (this.x > CANVAS_WIDTH) {
+      // randomly reset the x position of the enemy to a negative
+      // postion
+      this.x = -(Math.floor(Math.random() * MAX_X_POSITION));
+      //Change speed randomly every time enemey is reset
+      this.speed = Math.floor(Math.random() * MAX_SPEED + BASE_SPEED);
       // console.log(this.speed);
     } else {
+      // multiplies the speed by time delta and increments
+      // the enemy's x position
       this.x += this.speed * dt;
     }
   };
@@ -35,33 +60,37 @@ Enemy.prototype.update = function(dt) {
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    ctx.strokeRect(this.x + 3, this.y + 75, this.width - 5 ,this.height - 100);
-};
+    // ctx.strokeRect(this.x + 3, this.y + 75, this.width - 5 ,this.height - 100);
+  };
 
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
 var Player = function() {
   this.sprite = 'images/char-boy.png';
-  this.x = 300;
-  this.y = 570;
+  this.x = START_X;
+  this.y = START_Y;
   this.height = 171;
   this.width = 101;
-};
-
-var inBounds = function(object) {
-  return object.x > 0 && object.x <= 508 &&
-         object.y >= 0 && object.y <= 507;
+  this.lives = MAX_LIVES;
+  this.score = 0;
+  this.round = 0;
 };
 
 Player.prototype.update = function() {
-  console.log('x: ' + this.x);
-  console.log('y: ' + this.y);
+  if (player.lives === 0) {
+    reset();
+    $("#over").fadeIn('slow').animate({opacity: 1.0}, 1500).fadeOut('slow');
+  }
+  $('#pos').text(this.x + ' ' + this.y);
+  var currentLives = 'Lives: ' + this.lives;
+  $('#lives').text(currentLives);
+  var score = 'Score: ' + this.score;
+  $('#score').text(score);
 };
 
-
 Player.prototype.handleInput = function(input) {
-
+  // disables input key if it will move the player out of bounds
   if (input === 'left' && this.x > 0) {
     this.x -= 100;
   } else if (input === 'right' && this.x < 600) {
@@ -75,25 +104,50 @@ Player.prototype.handleInput = function(input) {
 
 Player.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-  ctx.strokeRect(this.x + 15, this.y + 65, this.width - 30 ,this.height - 95);
+  // ctx.strokeRect(this.x + 15, this.y + 65, this.width - 30 ,this.height - 95);
+};
+
+Player.prototype.changeChar = function(value) {
+  switch (value) {
+  case '1':
+    this.sprite = 'images/char-boy.png';
+  break;
+  case '2':
+    this.sprite = 'images/char-cat-girl.png';
+  break;
+  case '3':
+    this.sprite = 'images/char-horn-girl.png';
+  break;
+  case '4':
+    this.sprite = 'images/char-pink-girl.png';
+  break;
+  case '5':
+    this.sprite = 'images/char-princess-girl.png';
+  break;
+  case '6':
+    this.sprite = 'images/enemy-bug.png';
+  break;
+}
 };
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-var enemyRow1 = new Enemy(-100, 160);
-var enemyRow2 = new Enemy(0, 240);
-var enemyRow22 = new Enemy(-500, 240);
-var enemyRow3 = new Enemy(-300, 320);
-var enemyRow4 = new Enemy(-20, 410);
-var enemyRow5 = new Enemy(-1000, 410);
+
+var heart = new Prize(605, 70, 100, 'images/Heart.png', 1);
+var enemy1Row1 = new Enemy(-100, 140);
+var enemy1Row2 = new Enemy(0, 230);
+var enemy2Row2 = new Enemy(-500, 230);
+var enemy1Row3 = new Enemy(-300, 310);
+var enemy1Row4 = new Enemy(-20, 390);
+var enemy2Row4 = new Enemy(-1000, 390);
 var allEnemies = [];
-allEnemies.push(enemyRow1);
-allEnemies.push(enemyRow22);
-allEnemies.push(enemyRow2);
-allEnemies.push(enemyRow3);
-allEnemies.push(enemyRow4);
-allEnemies.push(enemyRow5);
+allEnemies.push(enemy1Row1);
+allEnemies.push(enemy1Row2);
+allEnemies.push(enemy2Row2);
+allEnemies.push(enemy1Row3);
+allEnemies.push(enemy1Row4);
+allEnemies.push(enemy2Row4);
 var player = new Player();
 
 // This listens for key presses and sends the keys to your
@@ -108,63 +162,49 @@ document.addEventListener('keyup', function(e) {
     player.handleInput(allowedKeys[e.keyCode]);
   });
 
-var reset = function() {
-  console.log('works');
-  player.x = 300;
-  player.y = 480;
-};
-
 var iconSelect;
 
-window.onload = function(){
+window.onload = function() {
 
-    iconSelect = new IconSelect("my-icon-select",
-        {'selectedIconWidth':28,
-        'selectedIconHeight':48,
-        'selectedBoxPadding':5,
-        'iconsWidth':28,
-        'iconsHeight':48,
-        'boxIconSpace':4,
-        'vectoralIconNumber':8,
-        'horizontalIconNumber':1});
+    iconSelect = new IconSelect('my-icon-select',
+        {selectedIconWidth:28,
+        selectedIconHeight:48,
+        selectedBoxPadding:0,
+        iconsWidth:28,
+        iconsHeight:48,
+        boxIconSpace:5,
+        vectoralIconNumber:2,
+        horizontalIconNumber:1});
 
     var icons = [];
-    icons.push({'iconFilePath':'images/char-boy.png', 'iconValue':'1'});
-    icons.push({'iconFilePath':'images/char-cat-girl.png', 'iconValue':'2'});
-    icons.push({'iconFilePath':'images/char-horn-girl.png', 'iconValue':'3'});
-    icons.push({'iconFilePath':'images/char-pink-girl.png', 'iconValue':'4'});
-    icons.push({'iconFilePath':'images/char-princess-girl.png', 'iconValue':'5'});
-    icons.push({'iconFilePath':'images/enemy-bug.png', 'iconValue':'6'});
+    icons.push({iconFilePath:'images/char-boy.png', iconValue:'1'});
+    icons.push({iconFilePath:'images/char-cat-girl.png', iconValue:'2'});
+    icons.push({iconFilePath:'images/char-horn-girl.png', iconValue:'3'});
+    icons.push({iconFilePath:'images/char-pink-girl.png', iconValue:'4'});
+    icons.push({iconFilePath:'images/char-princess-girl.png', iconValue:'5'});
+    icons.push({iconFilePath:'images/enemy-bug.png', iconValue:'6'});
 
     iconSelect.refresh(icons);
 
-};
+  };
 
-var changeChar = function(value) {
-  switch (value) {
-  case '1':
-    player.sprite = 'images/char-boy.png';
-  break;
-  case '2':
-    player.sprite = 'images/char-cat-girl.png';
-  break;
-  case '3':
-    player.sprite = 'images/char-horn-girl.png';
-    break;
-  case '4':
-    player.sprite = 'images/char-pink-girl.png';
-    break;
-  case '5':
-    player.sprite = 'images/char-princess-girl.png';
-    break;
-  case '6':
-    player.sprite = 'images/enemy-bug.png';
-    break;
-  }
-};
-document.querySelector('button').addEventListener('click', reset, false);
+var reset = function() {
+      console.log('work');
+      player.x = START_X;
+      player.y = START_Y;
+      player.lives = MAX_LIVES;
+      player.score = 0;
+    };
+
 document.getElementById('my-icon-select').addEventListener('changed', function(e) {
-              var value = iconSelect.getSelectedValue();
-              console.log(value);
-              changeChar(value);
-            });
+  var value = iconSelect.getSelectedValue();
+  player.changeChar(value);
+});
+
+document.querySelector('button').addEventListener('click', reset, false);
+
+window.addEventListener('keydown', function(e) {
+  // space and arrow keys
+  if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+    e.preventDefault();
+  }}, false);

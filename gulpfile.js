@@ -1,7 +1,9 @@
 var gulp = require('gulp');
 var csslint = require('gulp-csslint');
+var cleanCSS = require('gulp-clean-css');
 csslint.addFormatter('csslint-stylish');
 var bs = require('browser-sync').create();
+var $ = require('gulp-load-plugins')();
 
 gulp.task('css', function() {
   gulp.src('css/style.css')
@@ -9,6 +11,16 @@ gulp.task('css', function() {
       shorthand: false
     }))
     .pipe(csslint.formatter('stylish'));
+});
+
+gulp.task('minify-css', function() {
+  return gulp.src('css/*.css')
+    .pipe($.plumber())
+    .pipe(cleanCSS({
+      compatibility: 'ie8'
+    }))
+    .pipe(gulp.dest('dist/css'))
+    .pipe(bs.stream());
 });
 
 gulp.task('serve', function() {
@@ -20,7 +32,7 @@ gulp.task('serve', function() {
   });
 
   gulp.watch('js/*.js').on('change', bs.reload);
-  gulp.watch('css/*.css');
+  gulp.watch('css/*.css', ['minify-css']);
   gulp.watch('./*.html').on('change', bs.reload);
 });
 
@@ -32,4 +44,4 @@ gulp.task('browser-sync', function() {
   });
 });
 
-gulp.task('default', ['css', 'serve']);
+gulp.task('default', ['css', 'minify-css', 'serve']);
