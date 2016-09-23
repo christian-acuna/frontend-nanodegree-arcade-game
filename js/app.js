@@ -8,6 +8,7 @@ var MAX_LIVES = 10;
 var TILE_WIDTH = 101,
     TILE_HEIGHT = 83;
 
+
 // Prize class
 var Prize = function(x, y, score, image, life) {
   this.score = score;
@@ -85,7 +86,7 @@ Player.prototype.update = function() {
   console.log(this.x);
   console.log(this.y);
   if (this.lives === 0) {
-    reset();
+    this.reset();
     $("#over").fadeIn('slow').animate({
       opacity: 1.0
     }, 1500).fadeOut('slow');
@@ -109,6 +110,13 @@ Player.prototype.handleInput = function(input) {
   } else if (input === 'down' && this.y < 570) {
     this.y += TILE_HEIGHT;
   }
+};
+
+Player.prototype.reset = function() {
+  this.x = START_X;
+  this.y = START_Y;
+  this.lives = MAX_LIVES;
+  this.score = 0;
 };
 
 Player.prototype.render = function() {
@@ -238,7 +246,10 @@ document.getElementById('my-icon-select').addEventListener('changed', function(e
 });
 
 // call reset function when user presses Reset button
-document.querySelector('button').addEventListener('click', reset, false);
+$('#reset').click(function() {
+    player.reset();
+  }
+);
 
 // disable default behavior for arrow keys to prevent scrollbar from
 // moving when a user moves their character
