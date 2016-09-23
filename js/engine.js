@@ -116,7 +116,7 @@ var Engine = (function(global) {
   // if player makes in, a new life is added and 100 points as well as
   // returning player to inital starting position
   function winGame() {
-    if (player.y === 30 && player.x === 600) {
+    if (player.y === 72 && player.x === 603) {
       reset();
       player.score += heart.score;
       player.lives += heart.life;

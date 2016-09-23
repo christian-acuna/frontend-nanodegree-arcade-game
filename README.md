@@ -14,6 +14,11 @@ Gameplay
 The player starts off with ten lives and tries to make it pass the lanes without
 colliding with a ladybug. The speed of the ladybug is generated dynamically every time it enters the screen.
 
+* `↑` moves the player up
+* `↓` moves the player down
+* `→` moves the player right
+* `←` moves the player left
+
 ![Demo](http://i.giphy.com/l3vRnlO3UZmPgjCTe.gif)
 
 ## Change Character
