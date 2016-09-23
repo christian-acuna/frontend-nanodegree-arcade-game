@@ -1,10 +1,12 @@
 // Constant values
-var MAX_SPEED = 700;
+var MAX_SPEED = 500;
 var BASE_SPEED = 300;
 var MAX_X_POSITION = 300;
 var START_X = 300;
 var START_Y = 570;
 var MAX_LIVES = 10;
+var TILE_WIDTH = 101,
+    TILE_HEIGHT = 83;
 
 // Prize class
 var Prize = function(x, y, score, image, life) {
@@ -80,6 +82,8 @@ var Player = function() {
 Player.prototype.update = function() {
   // if lives equal zers reset player position and lives
   // also display GAME OVER h3 tag that fades out
+  console.log(this.x);
+  console.log(this.y);
   if (this.lives === 0) {
     reset();
     $("#over").fadeIn('slow').animate({
@@ -97,13 +101,13 @@ Player.prototype.update = function() {
 Player.prototype.handleInput = function(input) {
   // disables input key if it will move the player out of bounds
   if (input === 'left' && this.x > 0) {
-    this.x -= 100;
+    this.x -= TILE_WIDTH;
   } else if (input === 'right' && this.x < 600) {
-    this.x += 100;
+    this.x += TILE_WIDTH;
   } else if (input === 'up' && this.y > 30) {
-    this.y -= 90;
+    this.y -= TILE_HEIGHT;
   } else if (input === 'down' && this.y < 570) {
-    this.y += 90;
+    this.y += TILE_HEIGHT;
   }
 };
 
