@@ -5,38 +5,49 @@ var MAX_X_POSITION = 300;
 var START_X = 300;
 var START_Y = 570;
 var MAX_LIVES = 10;
-var TILE_WIDTH = 101,
-    TILE_HEIGHT = 83;
+var TILE_WIDTH = 101;
+var TILE_HEIGHT = 83;
 
-
-// Prize class
-var Prize = function(x, y, score, image, life) {
-  this.score = score;
-  this.sprite = image;
+// Superclass
+var Character = function(x, y, sprite) {
   this.x = x;
   this.y = y;
-  this.life = life;
+  this.sprite = sprite;
 };
 
-Prize.prototype.render = function() {
+Character.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+// Prize class
+var Prize = function(x, y, score, sprite, life) {
+  Character.call(this, x, y, sprite);
+  this.score = score;
+  this.life = life;
+};
+
+Prize.prototype = Object.create(Character.prototype);
+Prize.prototype.constructor = Prize;
+
+// Prize.prototype.render = function() {
+//   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+// };
+
 // Enemies our player must avoid
-var Enemy = function(x, y) {
+var Enemy = function(x, y, sprite) {
   // Variables applied to each of our instances go here,
   // we've provided one for you to get started
 
   // The image/sprite for our enemies, this uses
   // a helper we've provided to easily load images
-  this.sprite = 'images/enemy-bug.png';
+  Character.call(this, x, y, sprite);
   this.height = 171;
   this.width = 101;
-  this.x = x;
-  this.y = y;
   this.speed = BASE_SPEED;
 };
 
+Enemy.prototype = Object.create(Character.prototype);
+Enemy.prototype.constructor = Enemy;
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -60,25 +71,19 @@ Enemy.prototype.update = function(dt) {
   }
 };
 
-// Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
-  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-  //draw box around the enemy to debug checkCollisions();
-  // ctx.strokeRect(this.x + 3, this.y + 75, this.width - 5 ,this.height - 100);
-};
-
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-var Player = function() {
-  this.sprite = 'images/char-boy.png';
-  this.x = START_X;
-  this.y = START_Y;
+var Player = function(x, y, sprite) {
+  Character.call(this, x, y, sprite);
   this.height = 171;
   this.width = 101;
   this.lives = MAX_LIVES;
   this.score = 0;
 };
+
+Player.prototype = Object.create(Character.prototype);
+Player.prototype.constructor = Player;
 
 Player.prototype.update = function() {
   // if lives equal zers reset player position and lives
@@ -119,12 +124,6 @@ Player.prototype.reset = function() {
   this.score = 0;
 };
 
-Player.prototype.render = function() {
-  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-  // uncommnet to view dimensions used in checkCollisions();
-  // ctx.strokeRect(this.x + 15, this.y + 65, this.width - 30 ,this.height - 95);
-};
-
 // method to change sprite of char from icon selection input
 Player.prototype.changeChar = function(value) {
   switch (value) {
@@ -153,14 +152,15 @@ Player.prototype.changeChar = function(value) {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
-var player = new Player();
+var player = new Player(START_X, START_Y, 'images/char-boy.png');
 var heart = new Prize(605, 70, 100, 'images/Heart.png', 1);
-var enemy1Row1 = new Enemy(-100, 140);
-var enemy1Row2 = new Enemy(0, 230);
-var enemy2Row2 = new Enemy(-500, 230);
-var enemy1Row3 = new Enemy(-300, 310);
-var enemy1Row4 = new Enemy(-20, 390);
-var enemy2Row4 = new Enemy(-1000, 390);
+var enemySprite = 'images/enemy-bug.png';
+var enemy1Row1 = new Enemy(-100, 140, enemySprite);
+var enemy1Row2 = new Enemy(0, 230, enemySprite);
+var enemy2Row2 = new Enemy(-500, 230, enemySprite);
+var enemy1Row3 = new Enemy(-300, 310, enemySprite);
+var enemy1Row4 = new Enemy(-20, 390, enemySprite);
+var enemy2Row4 = new Enemy(-1000, 390, enemySprite);
 var allEnemies = [];
 // add ass enemies to allEnemies array
 allEnemies.push(enemy1Row1);
