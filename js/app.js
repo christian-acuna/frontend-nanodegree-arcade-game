@@ -80,7 +80,7 @@ var Player = function() {
 Player.prototype.update = function() {
   // if lives equal zers reset player position and lives
   // also display GAME OVER h3 tag that fades out
-  if (player.lives === 0) {
+  if (this.lives === 0) {
     reset();
     $("#over").fadeIn('slow').animate({
       opacity: 1.0
